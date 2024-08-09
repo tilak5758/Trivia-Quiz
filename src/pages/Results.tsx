@@ -18,7 +18,7 @@ const Results: React.FC = () => {
       <p className='results-summary'>Total Questions Served: {totalQuestions}</p>
       <p className='results-summary'>Total Correct Answers: {correctAnswers}</p>
       <p className='results-summary'>Total Incorrect Answers: {incorrectAnswers}</p>
-      <button className='back-button' onClick={handleBackToHome}>Back to Home</button>
+      <button className='back-button' onClick={handleBackToHome}>Restart Game</button>
     </div>
   );
 };
