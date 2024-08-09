@@ -28,7 +28,7 @@ const Trivia: React.FC = () => {
     );
   }
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className='loading'>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   // Handle case where there are no questions or the index is out of bounds
