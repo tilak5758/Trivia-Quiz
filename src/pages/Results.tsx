@@ -13,12 +13,12 @@ const Results: React.FC = () => {
   };
 
   return (
-    <div className='container'>
-      <h1>Quiz Results</h1>
-      <p>Total Questions Served: {totalQuestions}</p>
-      <p>Total Correct Answers: {correctAnswers}</p>
-      <p>Total Incorrect Answers: {incorrectAnswers}</p>
-      <button onClick={handleBackToHome}>Back to Home</button>
+    <div className='results-container'>
+      <h1 className='results-header'>Quiz Results</h1>
+      <p className='results-summary'>Total Questions Served: {totalQuestions}</p>
+      <p className='results-summary'>Total Correct Answers: {correctAnswers}</p>
+      <p className='results-summary'>Total Incorrect Answers: {incorrectAnswers}</p>
+      <button className='back-button' onClick={handleBackToHome}>Back to Home</button>
     </div>
   );
 };

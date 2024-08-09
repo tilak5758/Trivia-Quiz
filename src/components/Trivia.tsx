@@ -3,19 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useTrivia } from '../hooks/useTrivia';
 import '../styles/Trivia.css';
 
-
-
 const Trivia: React.FC = () => {
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
-  const { questions, loading, error } = useTrivia();
+  const { questions, loading, error, fetchQuestions } = useTrivia();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
   const navigate = useNavigate();
 
-  const handleStartClick = () => {
+  const handleStartClick = async () => {
     setStartQuiz(true);
+    await fetchQuestions(); // Fetch questions only when the quiz starts
   };
 
   if (!startQuiz) {
