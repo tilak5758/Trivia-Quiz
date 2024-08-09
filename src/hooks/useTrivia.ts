@@ -1,46 +1,49 @@
 import { useState, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { TriviaQuestion, TriviaAPIResponse } from '../types/trivia';
 
-export const useTrivia = (amount: number) => {
+export const useTrivia = () => {
   const [questions, setQuestions] = useState<TriviaQuestion[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [retryDelay, setRetryDelay] = useState<number>(0);
 
-  const fetchQuestions = async (retries: number = 3, delay: number = 1000) => {
+  useEffect(() => {
+    
+    fetchQuestions();
+  }, []);
+
+
+  const fetchQuestions = async () => {
+    setLoading(true); // Start loading before fetching
+    setError(null); // Clear previous errors
     try {
-      const response = await axios.get<TriviaAPIResponse>(
-        `https://opentdb.com/api.php?amount=${amount}`
-      );
+
+      const response = await axios?.get<TriviaAPIResponse>('https://opentdb.com/api.php?amount=10');
+
       setQuestions(response.data.results);
+      setLoading(false)
       setError(null); // Clear error if request is successful
-      setRetryDelay(0); // Reset delay on success
-    } catch (err) {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 429 && retries > 0) {
-          // Set delay for user feedback
-          setRetryDelay(delay / 1000); // Convert ms to seconds
-          // Retry with exponential backoff
-          setTimeout(() => fetchQuestions(retries - 1, delay * 2), delay);
+      // Reset delay on success
+
+    } catch (err: any) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.status === 429) {
+          // Handle rate limit error
+          setError('Too many requests. Please try again later.');
         } else {
-          // Handle other errors or if no retries left
-          console.error("Error fetching trivia questions:", err);
-          setError('Failed to load questions. Please try again later.');
+          // Handle other Axios errors
+          setError('Failed to fetch trivia questions. Please try again.');
         }
       } else {
         // Handle unexpected errors
-        console.error("Unexpected error fetching trivia questions:", err);
         setError('An unexpected error occurred.');
       }
-    } finally {
-      setLoading(false);
+      setLoading(false); // Set loading to false even if an error occurs
+
     }
+
   };
 
-  useEffect(() => {
-    fetchQuestions();
-  }, [amount]);
 
-  return { questions, loading, error, retryDelay };
+  return { questions, loading, error, };
 };

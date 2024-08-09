@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useTrivia } from '../hooks/useTrivia';
 import '../styles/Trivia.css';
 
-interface TriviaProps {
-  amount: number;
-}
 
-const Trivia: React.FC<TriviaProps> = ({ amount }) => {
+
+const Trivia: React.FC = () => {
   const [startQuiz, setStartQuiz] = useState<boolean>(false);
-  const { questions, loading, error, retryDelay } = useTrivia(amount);
+  const { questions, loading, error } = useTrivia();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
@@ -31,7 +29,7 @@ const Trivia: React.FC<TriviaProps> = ({ amount }) => {
     );
   }
 
-  if (loading) return <p>Loading...{retryDelay > 0 && ` Retrying in ${retryDelay} seconds`}</p>;
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
   // Handle case where there are no questions or the index is out of bounds
@@ -61,7 +59,7 @@ const Trivia: React.FC<TriviaProps> = ({ amount }) => {
       setSelectedAnswer(null);
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
-      navigate('/results', { state: { totalQuestions: amount, correctAnswers: correctAnswersCount } });
+      navigate('/results', { state: { totalQuestions: 10, correctAnswers: correctAnswersCount } });
     }
   };
 
@@ -69,7 +67,7 @@ const Trivia: React.FC<TriviaProps> = ({ amount }) => {
     <div className="container">
       <div className="question-header">
         <h2 className="question-number">
-          Question {currentQuestionIndex + 1} of {amount}
+          Question {currentQuestionIndex + 1} of 10
         </h2>
         <h2 className="question">{currentQuestion.question}</h2>
       </div>
